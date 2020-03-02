@@ -261,6 +261,7 @@ exports.registerStudentOnBlockchain = async function(createdUser) {
 
     let user = new User({
       username: identity,
+      email: createdUser.email,
       oauthType: createdUser.oauthType,
       password: createdUser.password ? createdUser.password : '',
       role: USER_ROLES.STUDENT

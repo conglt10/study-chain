@@ -216,6 +216,21 @@ export const router = new Router({
           path: '/register',
           name: 'register',
           component: () => import('./views/Register.vue')
+        },
+        {
+          path: '/forgotPassword',
+          name: 'forgotPassword',
+          component: () => import('./views/ForgotPassword.vue')
+        },
+        {
+          path: '/getTokenResetPassword/:token',
+          name: 'getTokenResetPassword',
+          component: () => import('./views/GetTokenResetPassword.vue')
+        },
+        {
+          path: '/resetPassword',
+          name: 'resetPassword',
+          component: () => import('./views/ResetPassword.vue')
         }
       ],
       meta: {
@@ -227,7 +242,16 @@ export const router = new Router({
 });
 router.beforeEach((to, from, next) => {
   let user = JSON.parse(localStorage.getItem('user'));
-  const publicPages = ['/login', '/register', '/home', '/404', '/403'];
+  const publicPages = [
+    '/login',
+    '/register',
+    '/resetPassword',
+    '/forgotPassword',
+    '/getTokenResetPassword/:token',
+    '/home',
+    '/404',
+    '/403'
+  ];
   const afterloginPages = ['/login', '/register', '/home'];
   const authRequired = publicPages.includes(to.path);
   const afterlogin = afterloginPages.includes(to.path);

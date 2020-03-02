@@ -42,6 +42,40 @@ const actions = {
       }
     );
   },
+  forgotPassword({ dispatch, commit }, { email }) {
+    commit('sendEmailRequest', { email });
+    authService.forgotPassword(email).then(
+      (user) => {
+        commit('sendEmailRequest', user);
+        router.push('/resetPassword');
+      },
+      (error) => {
+        commit('sendEmailFailure', error);
+        dispatch('alert/error', error, { root: true });
+      }
+    );
+  },
+  getTokenResetPassword({ dispatch, commit }, token) {
+    authService.getTokenResetPassword(token).then(
+      (result) => {
+        commit('getTokenRequest', token);
+        router.push('/resetPassword');
+      },
+      (error) => {
+        dispatch('alert/error', error, { root: true });
+      }
+    );
+  },
+  resetPassword({ dispatch }, { password, confirmPassword, token }) {
+    authService.resetPassword(password, confirmPassword, token).then(
+      (user) => {
+        router.push('/login');
+      },
+      (error) => {
+        dispatch('alert/error', error, { root: true });
+      }
+    );
+  },
 
   logout({ commit }) {
     authService.logout();
@@ -118,11 +152,26 @@ const mutations = {
   registerFailure(state) {
     state.status = {};
   },
+  sendEmailRequest(state, user) {
+    state.status = { forgotPassword: true };
+  },
+  sendEmailSuccess(state) {
+    state.status = {};
+  },
+  sendEmailRequestFailure(state) {
+    state.status = {};
+  },
+  getTokenRequest(state, token) {
+    state.token = { token };
+  },
   logout(state) {
     state.status = {};
     state.user = null;
+    state.token = null;
   }
 };
+
+//
 
 export const account = {
   namespaced: true,

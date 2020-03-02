@@ -4,17 +4,21 @@
       <div class="col-md-6 login-form-2">
         <h3>Sign Up</h3>
         <ValidationObserver ref="observer" v-slot="{ passes }">
-          <b-form @submit.prevent="passes(onSubmit);" @reset="onReset">
-            <div v-if="alert.message" :class="`text-center alert ${alert.type}`">{{alert.message}}</div>
+          <b-form @submit.prevent="passes(onSubmit)" @reset="onReset">
+            <div v-if="alert.message" :class="`text-center alert ${alert.type}`">
+              {{ alert.message }}
+            </div>
             <ValidationProvider rules="required|min:6" name="Fullname" v-slot="{ valid, errors }">
               <b-form-group label="Fullname:" label-for="Fullname">
                 <b-form-input
                   type="text"
                   v-model="form.fullname"
-                  :state="errors[0] ? false : (valid ? true : null)"
+                  :state="errors[0] ? false : valid ? true : null"
                   placeholder="Fullname"
                 ></b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{
+                  errors[0]
+                }}</b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
 
@@ -23,10 +27,26 @@
                 <b-form-input
                   type="text"
                   v-model="form.username"
-                  :state="errors[0] ? false : (valid ? true : null)"
+                  :state="errors[0] ? false : valid ? true : null"
                   placeholder="Username"
                 ></b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{
+                  errors[0]
+                }}</b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+
+            <ValidationProvider rules="required|email" name="Email" v-slot="{ valid, errors }">
+              <b-form-group label="Email:" label-for="Email">
+                <b-form-input
+                  type="text"
+                  v-model="form.email"
+                  :state="errors[0] ? false : valid ? true : null"
+                  placeholder="Email"
+                ></b-form-input>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{
+                  errors[0]
+                }}</b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
 
@@ -40,10 +60,12 @@
                 <b-form-input
                   type="password"
                   v-model="form.password"
-                  :state="errors[0] ? false : (valid ? true : null)"
+                  :state="errors[0] ? false : valid ? true : null"
                   placeholder="Enter password"
                 ></b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{
+                  errors[0]
+                }}</b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
 
@@ -56,10 +78,12 @@
                 <b-form-input
                   type="password"
                   v-model="form.repassword"
-                  :state="errors[0] ? false : (valid ? true : null)"
+                  :state="errors[0] ? false : valid ? true : null"
                   placeholder="Confirm Password"
                 ></b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{
+                  errors[0]
+                }}</b-form-invalid-feedback>
               </b-form-group>
             </ValidationProvider>
             <hr />
@@ -81,35 +105,36 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
-import { ValidationObserver, ValidationProvider } from "vee-validate";
+import { mapState, mapActions } from 'vuex';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 export default {
-  name: "login",
+  name: 'login',
   components: {
     ValidationObserver,
     ValidationProvider
   },
   data() {
     return {
-      form: { fullname: "", username: "", password: "", repassword: "" }
+      form: { fullname: '', username: '', email: '', password: '', repassword: '' }
     };
   },
   computed: {
-    ...mapState("account", ["status"]),
+    ...mapState('account', ['status']),
     ...mapState({
-      alert: state => state.alert
+      alert: (state) => state.alert
     })
   },
   methods: {
-    ...mapActions("account", ["register"]),
+    ...mapActions('account', ['register']),
     onSubmit() {
       this.register(this.form);
     },
     onReset() {
-      this.form.fullname = "";
-      this.form.username = "";
-      this.form.password = "";
-      this.form.repassword = "";
+      this.form.fullname = '';
+      this.form.username = '';
+      this.form.email = '';
+      this.form.password = '';
+      this.form.repassword = '';
       requestAnimationFrame(() => {
         this.$refs.observer.reset();
       });

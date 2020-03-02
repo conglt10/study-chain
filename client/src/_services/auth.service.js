@@ -8,7 +8,10 @@ export const authService = {
   loginGoogle,
   getProfile,
   pushProfile,
-  changePass
+  changePass,
+  forgotPassword,
+  resetPassword,
+  getTokenResetPassword
 };
 
 async function login(username, password) {
@@ -33,9 +36,46 @@ async function login(username, password) {
 async function register(user) {
   let response = await axios.post(`${process.env.VUE_APP_API_BACKEND}/auth/register`, {
     username: user.username,
+    email: user.email,
     fullname: user.fullname,
     password: user.password
   });
+  return handleResponse(response);
+}
+
+async function forgotPassword(email) {
+  let response = await axios.post(
+    `${process.env.VUE_APP_API_BACKEND}/auth/forgotPassword`,
+    {
+      email
+    },
+    { 'content-type': 'application/x-www-form-urlencoded' }
+  );
+
+  return handleResponse(response);
+}
+
+async function getTokenResetPassword(token) {
+  try {
+    let response = await axios.get(
+      `${process.env.VUE_APP_API_BACKEND}/auth/resetPassword/${token}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function resetPassword(password, confirmPassword, token) {
+  let response = await axios.post(
+    `${process.env.VUE_APP_API_BACKEND}/auth/resetPassword/${token}`,
+    {
+      password,
+      confirmPassword
+    },
+    { 'content-type': 'application/x-www-form-urlencoded' }
+  );
+
   return handleResponse(response);
 }
 
