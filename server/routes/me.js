@@ -1001,8 +1001,12 @@ router.get('/classes', async (req, res) => {
     });
   }
 
-  classes = JSON.parse(classes.msg) ? JSON.parse(classes.msg) : [];
-  subjects = JSON.parse(subjects.msg) ? JSON.parse(subjects.msg) : [];
+    if (!classes.success || !subjects.success) {
+      return res.status(500).json({
+        success: false,
+        msg: 'Query chaincode failed'
+      });
+    }
 
   if (user.role === USER_ROLES.STUDENT) {
     for (let i = 0; i < classes.length; i++) {

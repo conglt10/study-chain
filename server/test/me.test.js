@@ -574,6 +574,28 @@ describe('GET /account/me/classes', () => {
       });
   });
 
+  it('failed to query classes of teacher in chaincode', (done) => {
+    connect.returns({
+      contract: 'academy',
+      network: 'certificatechannel',
+      gateway: 'gateway',
+      user: { username: 'conglt', role: USER_ROLES.TEACHER }
+    });
+
+    queryClasses.returns({
+      success: false,
+      msg: 'Query chaincode has failed'
+    });
+
+    request(app)
+      .get('/account/me/classes')
+      .set('authorization', `${process.env.JWT_TEACHER_EXAMPLE}`)
+      .then((res) => {
+        expect(res.status).equal(404);
+        done();
+      });
+  });
+
   it('success query classes of user student', (done) => {
     connect.returns({
       contract: 'academy',
