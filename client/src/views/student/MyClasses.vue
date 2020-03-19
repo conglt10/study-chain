@@ -63,22 +63,24 @@ export default {
         .then(async () => {
           this.fullscreenLoading = true;
 
-          let data = await this.cancelRegisteredClass(row.ClassID);
+          let data = await this.cancelRegisteredClass({
+            classId: row.ClassID,
+            courseId: '1f67b0d1-60a5-409f-95a6-1a6b17ee0442'
+          });
 
-          if (data) {
-            if (data.success) {
-              this.status = false;
-              Message.success('Unenroll successfully!');
-            } else {
-              Message.error(data.msg);
-            }
+          if (!data) {
+            Message.error(data.msg);
+          } else if (data) {
+            this.status = false;
+            Message.success('Unenroll successfully!');
           }
-          await this.getMyClasses();
 
+          await this.getMyClasses();
           this.fullscreenLoading = false;
         })
         .catch(() => {
-          Message.info('Canceled');
+          Message.error('Unenroll has failed');
+          this.fullscreenLoading = false;
         });
     }
   },

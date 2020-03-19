@@ -60,13 +60,11 @@ export default {
         .then(async () => {
           this.fullscreenLoading = true;
           let data = await this.registerCourse(row.CourseID);
-          if (data) {
-            if (data.success) {
-              Message.success('Successfully enrolled this course!');
-              this.$router.push({ path: `/myCourses` });
-            } else {
-              Message.error('Failed to enroll this course!');
-            }
+          if (!data) {
+            Message.error('Failed to enroll this course!');
+          } else if (data) {
+            Message.success('Successfully enrolled this course!');
+            this.$router.push({ path: `/myCourses` });
           }
           this.fullscreenLoading = false;
         })

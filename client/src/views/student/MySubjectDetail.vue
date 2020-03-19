@@ -87,13 +87,11 @@ export default {
             classId: row.ClassID,
             courseId: this.courseInfo.course.CourseID
           });
-          if (data) {
-            if (data.success) {
-              Message.success('Successfully enrolled this class!');
-              await this.getSubject(this.$route.params.subjectId);
-            } else {
-              Message.error('Failed to enroll this class!');
-            }
+          if (!data) {
+            Message.error('Failed to enroll this class!');
+          } else if (data) {
+            Message.success('Successfully enrolled this class!');
+            await this.getSubject(this.$route.params.subjectId);
           }
           this.fullscreenLoading = false;
         })
@@ -112,13 +110,12 @@ export default {
             classId: row.ClassID,
             courseId: this.courseInfo.course.CourseID
           });
-          if (data) {
-            if (data.success) {
-              Message.success('Successfully canceled enrollment!');
-              await this.getSubject(this.$route.params.subjectId);
-            } else {
-              Message.error('Failed to cancel this class!');
-            }
+
+          if (!data) {
+            Message.error('Failed to unenroll this class!');
+          } else if (data) {
+            Message.success('Successfully unenroll this class!');
+            await this.getSubject(this.$route.params.subjectId);
           }
           this.fullscreenLoading = false;
         })
